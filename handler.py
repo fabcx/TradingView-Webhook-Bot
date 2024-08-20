@@ -4,6 +4,7 @@
 # File Name             : handler.py              #
 # ----------------------------------------------- #
 
+import asyncio
 import smtplib
 import ssl
 from email.mime.text import MIMEText
@@ -21,17 +22,17 @@ def send_alert(data):
     if config.send_telegram_alerts:
         tg_bot = Bot(token=config.tg_token)
         try:
-            tg_bot.sendMessage(
+            asyncio.run(tg_bot.sendMessage(
                 data["telegram"],
                 msg,
                 parse_mode="MARKDOWN",
-            )
+            ))
         except KeyError:
-            tg_bot.sendMessage(
+            asyncio.run(tg_bot.sendMessage(
                 config.channel,
                 msg,
                 parse_mode="MARKDOWN",
-            )
+            ))
         except Exception as e:
             print("[X] Telegram Error:\n>", e)
 
